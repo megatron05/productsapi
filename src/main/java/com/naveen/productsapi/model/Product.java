@@ -1,18 +1,15 @@
 package com.naveen.productsapi.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
+@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -20,12 +17,13 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
-    private String skuCode;
     private String productName;
-    private BigDecimal price;
-    private String gender;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "model_id", referencedColumnName = "modelId")
+    private Model model;
     private String size;
     private String colour;
-    private String type;
+    private BigDecimal price;
+
 
 }

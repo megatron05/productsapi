@@ -1,5 +1,7 @@
 package com.naveen.productsapi.controller;
 
+import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.dto.ProductRequest;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -16,18 +18,23 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>>getAllProducts(){
-        return new ResponseEntity<List<Product>>(productService.getAllProducts(), HttpStatus.OK);
+    public ResponseEntity<?> getAllProducts(){
+        return productService.getAllProducts();
+    }
+
+    @GetMapping("/{pid}")
+    public ResponseEntity<?> getProduct(@PathVariable Long pid){
+        return productService.getProduct(pid);
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product){
-        return new ResponseEntity<Product>(productService.addProduct(product), HttpStatus.CREATED);
+    public ResponseEntity<?> addProduct(@RequestBody ProductRequest productRequest){
+        return productService.addProduct(productRequest);
     }
 
-    @PostMapping("/toInventory/{pid}/{qty}")
-    public ResponseEntity<?> addProductToInventory(@PathVariable Long pid, @PathVariable Long qty){
-        return productService.addProductToInventory(pid,qty);
+    @PostMapping("/toInventory")
+    public ResponseEntity<?> addProductToInventory(@RequestBody InventoryRequest inventoryRequest){
+        return productService.addProductToInventory(inventoryRequest);
     }
 
     @DeleteMapping("/{pid}")
@@ -35,4 +42,8 @@ public class ProductController {
         return productService.deleteProduct(pid);
     }
 
+    @PutMapping("/{pid}")
+    public void updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long pid){
+        productService.updateProduct(productRequest, pid);
+    }
 }
