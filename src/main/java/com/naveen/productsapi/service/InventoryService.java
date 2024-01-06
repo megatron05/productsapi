@@ -1,9 +1,11 @@
 package com.naveen.productsapi.service;
 
+import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.repository.InventoryRepo;
 import com.naveen.productsapi.repository.ProductRepo;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,22 @@ public class InventoryService {
         return inventoryRepo.findAll();
     }
 
-    public Inventory addProductToInventory(Inventory productStats) {
-        return inventoryRepo.save(productStats);
+    public ResponseEntity<?> addProductToInventory(InventoryRequest inventoryRequest) {
+        Optional<Product> product = productRepo.findById(inventoryRequest.getProductId());
+        if(product.isPresent()){
+            return new ResponseEntity<>("Invalid Product id", HttpStatus.CONFLICT);
+        }
+        if(inventoryRepo.findByProduct(product.get()).isPresent()){
+            return new ResponseEntity<>("Product already exists in inventory", HttpStatus.CONFLICT);
+        }
+        else{
+            Inventory inventory = Inventory.builder()
+                    .product(product.get())
+                    .quantity(inventoryRequest.getQuantity())
+                    .build();
+            return new ResponseEntity<>(inventoryRepo.save(inventory), HttpStatus.CONFLICT);
+        }
+
     }
 
     public ResponseEntity<String> deleteProductFromInventory(Long pid) {
@@ -42,21 +58,23 @@ public class InventoryService {
         return null;
     }
 
-    public ResponseEntity<?> updateProductInInventory(Long pid, Inventory inventory) {
-        Optional<Product> product = productRepo.findById(pid);
-        if(product.isPresent()){
-            Optional<Inventory> existingInventory = inventoryRepo.findByProduct(product.get());
-            if(existingInventory.isPresent()) {
-                inventory.setId(existingInventory.get().getId());
-                inventoryRepo.save(inventory);
-                return new ResponseEntity<>(inventoryRepo.save(inventory), HttpStatus.OK);
+    public ResponseEntity<?> updateProductInInventory(InventoryRequest inventoryRequest, Long inventoryId) {
+        Optional<Inventory> inventory = inventoryRepo.findById(inventoryId);
+        if (inventory.isPresent()) {
+            Optional<Product> product = productRepo.findById(inventoryRequest.getProductId());
+            if (product.isPresent()) {
+                inventory.get().setProduct(product.get());
+                inventory.get().setQuantity(inventoryRequest.getQuantity());
+                return new ResponseEntity<>(inventoryRepo.save(inventory.get()), HttpStatus.CREATED);
+
+            } else {
+                return new ResponseEntity<>("Invalid Product id or Product not found", HttpStatus.CONFLICT);
             }
-            else{
-                return new ResponseEntity<>("Product  not in Inventory", HttpStatus.CONFLICT);
-            }
+
+        } else {
+            return new ResponseEntity<>("Invalid Inventory id ", HttpStatus.CONFLICT);
         }
-        else{
-            return new ResponseEntity<>("Invalid Product ID", HttpStatus.CONFLICT);
-        }
+
     }
+
 }

@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     @PutMapping("/{pid}")
-    public void updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long pid){
-        productService.updateProduct(productRequest, pid);
+    public ResponseEntity<?> updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long pid){
+        return productService.updateProduct(productRequest, pid);
     }
 }

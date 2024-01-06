@@ -2,6 +2,7 @@ package com.naveen.productsapi.service;
 
 import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.dto.ProductRequest;
+import com.naveen.productsapi.mapper.ProductMapper;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.model.Model;
 import com.naveen.productsapi.model.Product;
@@ -90,7 +91,21 @@ public class ProductService {
     }
 
 
-    public void updateProduct(ProductRequest productRequest, Long productId) {
+    public ResponseEntity<?> updateProduct(ProductRequest productRequest, Long productId) {
+
+        if(productRepo.findById(productId).isPresent()){
+            Optional<Model> model = modelRepo.findById(productRequest.getModelId());
+            if(model.isPresent()){
+                Product product = ProductMapper.mapProductRequestToProduct(productRequest, model.get(), productId);
+                return new ResponseEntity<>(productRepo.save(product), HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Model not found or Invalid model id", HttpStatus.CONFLICT);
+            }
+        }
+        else{
+            return new ResponseEntity<>("Product Not Found / Invalid ProductID", HttpStatus.CONFLICT);
+        }
     }
 
 //    To Map productRequest to product object
