@@ -27,16 +27,18 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{pid}")
-    public ResponseEntity<String> deleteProductFromInventory(@PathVariable Long pid){
+    public ResponseEntity<String> deleteProductFromInventory(@PathVariable Integer pid){
         return inventoryService.deleteProductFromInventory(pid);
     }
 
     @PutMapping("{pid}")
-    public ResponseEntity<?> updateProductInInventory(@PathVariable Long pid, @RequestBody Inventory inventory){
+    public ResponseEntity<?> updateProductInInventory(@PathVariable Integer pid, @RequestBody Inventory inventory){
         return inventoryService.updateProductInInventory(pid,inventory);
     }
 
-
-
+    @GetMapping("/check")
+    public ResponseEntity<?> checkInventory(@RequestHeader String productId, @RequestHeader Integer quantity) {
+        return inventoryService.checkForProduct(productId, quantity);
+    }
 
 }

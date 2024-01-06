@@ -27,7 +27,7 @@ public class ProductService {
         return productRepo.save(product);
     }
 
-    public ResponseEntity<?> addProductToInventory(Long pid, Long qty) {
+    public ResponseEntity<?> addProductToInventory(Integer pid, Integer qty) {
         Optional<Product> product = productRepo.findById(pid);
         if(product.isPresent()) {
             Optional<Inventory> inventory = inventoryRepo.findByProduct(product.get());
@@ -46,7 +46,7 @@ public class ProductService {
         return new ResponseEntity<>("Invalid Product Id", HttpStatus.CONFLICT);
     }
 
-    public ResponseEntity<?> deleteProduct(Long pid) {
+    public ResponseEntity<?> deleteProduct(Integer pid) {
         Optional<Product> product = productRepo.findById(pid);
         if(product.isPresent()){
             productRepo.delete(product.get());

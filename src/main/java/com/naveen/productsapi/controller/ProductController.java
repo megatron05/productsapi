@@ -26,12 +26,12 @@ public class ProductController {
     }
 
     @PostMapping("/toInventory/{pid}/{qty}")
-    public ResponseEntity<?> addProductToInventory(@PathVariable Long pid, @PathVariable Long qty){
+    public ResponseEntity<?> addProductToInventory(@PathVariable Integer pid, @PathVariable Integer qty){
         return productService.addProductToInventory(pid,qty);
     }
 
     @DeleteMapping("/{pid}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long pid){
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer pid){
         return productService.deleteProduct(pid);
     }
 
