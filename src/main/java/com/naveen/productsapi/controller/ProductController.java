@@ -32,13 +32,15 @@ public class ProductController {
         return productService.addProduct(productRequest);
     }
 
+
     @PostMapping("/toInventory")
     public ResponseEntity<?> addProductToInventory(@RequestBody InventoryRequest inventoryRequest){
         return productService.addProductToInventory(inventoryRequest);
+
     }
 
     @DeleteMapping("/{pid}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long pid){
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer pid){
         return productService.deleteProduct(pid);
     }
 

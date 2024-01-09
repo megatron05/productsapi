@@ -38,7 +38,7 @@ public class ProductService {
         }
     }
 
-//    public Product addProduct(Product product) { return productRepo.save(product); }
+
 
     public ResponseEntity<?> addProduct(ProductRequest productRequest){
         Optional<Model> model = modelRepo.findById(productRequest.getModelId());
@@ -64,6 +64,7 @@ public class ProductService {
 
     public ResponseEntity<?> addProductToInventory(InventoryRequest inventoryRequest) {
         Optional<Product> product = productRepo.findById(inventoryRequest.getProductId());
+
         if(product.isPresent()) {
             Optional<Inventory> inventory = inventoryRepo.findByProduct(product.get());
             if(inventory.isPresent()){
@@ -81,7 +82,7 @@ public class ProductService {
         return new ResponseEntity<>("Invalid Product Id", HttpStatus.CONFLICT);
     }
 
-    public ResponseEntity<?> deleteProduct(Long pid) {
+    public ResponseEntity<?> deleteProduct(Integer pid) {
         Optional<Product> product = productRepo.findById(pid);
         if(product.isPresent()){
             productRepo.delete(product.get());
@@ -108,14 +109,3 @@ public class ProductService {
         }
     }
 
-//    To Map productRequest to product object
-
-//    private Product mapToProduct(ProductRequest productRequest, Long pId) {
-//        return Product.builder()
-//                .productId(pId)
-//                .productName(productRequest.getProductName())
-//                .size(productRequest.getSize())
-//                .colour(productRequest.getColour())
-//                .build();
-//    }
-}
