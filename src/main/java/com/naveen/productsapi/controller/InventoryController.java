@@ -1,9 +1,8 @@
 package com.naveen.productsapi.controller;
 
-import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.DTO.InventoryRequest;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.service.InventoryService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class InventoryController {
     }
 
     @DeleteMapping("/{pid}")
-    public ResponseEntity<String> deleteProductFromInventory(@PathVariable Integer pid){
+    public ResponseEntity<String> deleteProductFromInventory(@PathVariable Long pid){
         return inventoryService.deleteProductFromInventory(pid);
     }
 
@@ -40,8 +39,8 @@ public class InventoryController {
 
 
     @GetMapping("/check")
-    public ResponseEntity<?> checkInventory(@RequestHeader String productId, @RequestHeader Integer quantity) {
-        return inventoryService.checkForProduct(productId, quantity);
+    public ResponseEntity<?> checkInventory(@RequestBody List<InventoryRequest> inventoryRequests) {
+        return inventoryService.checkForProduct(inventoryRequests);
     }
 
 

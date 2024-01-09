@@ -11,7 +11,7 @@ import lombok.*;
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private Product product;

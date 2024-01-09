@@ -1,4 +1,4 @@
-package com.naveen.productsapi.dto;
+package com.naveen.productsapi.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InventoryRequest {
     private Long productId;
-    private Long quantity;
+    private Integer quantity;
 }

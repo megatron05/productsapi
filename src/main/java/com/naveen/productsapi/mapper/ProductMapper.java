@@ -1,6 +1,6 @@
 package com.naveen.productsapi.mapper;
 
-import com.naveen.productsapi.dto.ProductRequest;
+import com.naveen.productsapi.DTO.ProductRequest;
 import com.naveen.productsapi.model.Model;
 import com.naveen.productsapi.model.Product;
 import lombok.RequiredArgsConstructor;

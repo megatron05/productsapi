@@ -1,11 +1,11 @@
 package com.naveen.productsapi.model;
 
 import jakarta.persistence.*;
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import java.math.BigDecimal;
 
 @Entity
