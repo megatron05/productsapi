@@ -1,8 +1,13 @@
 package com.naveen.productsapi.service;
 
+import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.dto.ProductRequest;
+import com.naveen.productsapi.mapper.ProductMapper;
 import com.naveen.productsapi.model.Inventory;
+import com.naveen.productsapi.model.Model;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.repository.InventoryRepo;
+import com.naveen.productsapi.repository.ModelRepo;
 import com.naveen.productsapi.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,26 +24,57 @@ public class ProductService {
 
     private final ProductRepo productRepo;
     private final InventoryRepo inventoryRepo;
-    public List<Product> getAllProducts() {
-        return  productRepo.findAll();
+    private final ModelRepo modelRepo;
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return  new ResponseEntity<>(productRepo.findAll(),HttpStatus.OK);
     }
 
-    public Product addProduct(Product product) {
-        return productRepo.save(product);
+    public ResponseEntity<?> getProduct(Long pid) {
+        if(productRepo.findById(pid).isPresent()){
+            return new ResponseEntity<>(productRepo.findById(pid).get(), HttpStatus.CREATED);
+        }
+        else {
+            return new ResponseEntity<>("Product not found  or Invalid product id", HttpStatus.CONFLICT);
+        }
     }
 
-    public ResponseEntity<?> addProductToInventory(Integer pid, Integer qty) {
-        Optional<Product> product = productRepo.findById(pid);
+
+
+    public ResponseEntity<?> addProduct(ProductRequest productRequest){
+        Optional<Model> model = modelRepo.findById(productRequest.getModelId());
+        if(model.isPresent()){
+            try{
+                Product product = Product.builder()
+                        .productName(productRequest.getProductName())
+                        .model(model.get())
+                        .size(productRequest.getSize())
+                        .colour(productRequest.getColour())
+                        .price(productRequest.getPrice())
+                        .build();
+
+                Product pro = productRepo.save(product);
+                return new ResponseEntity<>(pro, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Product already exits", HttpStatus.CONFLICT);
+            }
+
+        }
+        return new ResponseEntity<>("Model not found or Invalid model id", HttpStatus.CONFLICT);
+    }
+
+    public ResponseEntity<?> addProductToInventory(InventoryRequest inventoryRequest) {
+        Optional<Product> product = productRepo.findById(inventoryRequest.getProductId());
+
         if(product.isPresent()) {
             Optional<Inventory> inventory = inventoryRepo.findByProduct(product.get());
             if(inventory.isPresent()){
                 return new ResponseEntity<>("Already exits in inventory", HttpStatus.CONFLICT);
             }
             else{
-                Inventory inventory1 = new Inventory();
-                inventory1.setProduct(product.get());
-                inventory1.setQuantity(qty);
-                return new ResponseEntity<>(inventoryRepo.save(inventory1),HttpStatus.CREATED);
+                Inventory inv = new Inventory();
+                inv.setProduct(product.get());
+                inv.setQuantity(inventoryRequest.getQuantity());
+                return new ResponseEntity<>(inventoryRepo.save(inv),HttpStatus.CREATED);
 
             }
 
@@ -54,4 +90,22 @@ public class ProductService {
         }
         return new ResponseEntity<>("Product Not Found / Invalid ProductID", HttpStatus.CONFLICT);
     }
-}
+
+
+    public ResponseEntity<?> updateProduct(ProductRequest productRequest, Long productId) {
+
+        if(productRepo.findById(productId).isPresent()){
+            Optional<Model> model = modelRepo.findById(productRequest.getModelId());
+            if(model.isPresent()){
+                Product product = ProductMapper.mapProductRequestToProduct(productRequest, model.get(), productId);
+                return new ResponseEntity<>(productRepo.save(product), HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Model not found or Invalid model id", HttpStatus.CONFLICT);
+            }
+        }
+        else{
+            return new ResponseEntity<>("Product Not Found / Invalid ProductID", HttpStatus.CONFLICT);
+        }
+    }
+

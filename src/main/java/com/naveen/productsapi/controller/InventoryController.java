@@ -1,5 +1,6 @@
 package com.naveen.productsapi.controller;
 
+import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.service.InventoryService;
 import jakarta.websocket.server.PathParam;
@@ -22,8 +23,8 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Inventory> addProductToInventory(@RequestBody Inventory productStats){
-        return new ResponseEntity<Inventory>(inventoryService.addProductToInventory(productStats),HttpStatus.CREATED);
+    public ResponseEntity<?> addProductToInventory(@RequestBody InventoryRequest inventoryRequest){
+        return inventoryService.addProductToInventory(inventoryRequest);
     }
 
     @DeleteMapping("/{pid}")
@@ -31,14 +32,17 @@ public class InventoryController {
         return inventoryService.deleteProductFromInventory(pid);
     }
 
-    @PutMapping("{pid}")
-    public ResponseEntity<?> updateProductInInventory(@PathVariable Integer pid, @RequestBody Inventory inventory){
-        return inventoryService.updateProductInInventory(pid,inventory);
+
+    @PutMapping("{iid}")
+    public ResponseEntity<?> updateProductInInventory(@RequestBody InventoryRequest inventoryRequest, @PathVariable Long iid) {
+        return inventoryService.updateProductInInventory(inventoryRequest, iid);
     }
+
 
     @GetMapping("/check")
     public ResponseEntity<?> checkInventory(@RequestHeader String productId, @RequestHeader Integer quantity) {
         return inventoryService.checkForProduct(productId, quantity);
     }
+
 
 }
