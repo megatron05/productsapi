@@ -1,7 +1,7 @@
 package com.naveen.productsapi.controller;
 
-import com.naveen.productsapi.DTO.InventoryRequest;
-import com.naveen.productsapi.DTO.ProductRequest;
+import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.dto.ProductRequest;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.service.ProductService;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.naveen.productsapi.controller;
 
-import com.naveen.productsapi.DTO.InventoryRequest;
+import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +37,9 @@ public class InventoryController {
         return inventoryService.updateProductInInventory(inventoryRequest, iid);
     }
 
-
-    @GetMapping("/check")
+    @PostMapping("/check")
     public ResponseEntity<?> checkInventory(@RequestBody List<InventoryRequest> inventoryRequests) {
         return inventoryService.checkForProduct(inventoryRequests);
     }
-
 
 }
