@@ -1,11 +1,13 @@
 package com.naveen.productsapi.service;
 
 
-import com.naveen.productsapi.DTO.InventoryRequest;
+import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.dto.InventoryResponse;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.repository.InventoryRepo;
 import com.naveen.productsapi.repository.ProductRepo;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ public class InventoryService {
 
     public ResponseEntity<?> addProductToInventory(InventoryRequest inventoryRequest) {
         Optional<Product> product = productRepo.findById(inventoryRequest.getProductId());
-        if(product.isPresent()){
+        if(!product.isPresent()){
             return new ResponseEntity<>("Invalid Product id", HttpStatus.CONFLICT);
         }
         if(inventoryRepo.findByProduct(product.get()).isPresent()){
@@ -81,11 +83,15 @@ public class InventoryService {
 
     }
 
-
     public ResponseEntity<?> checkForProduct(List<InventoryRequest> inventoryRequests) {
-        inventoryRequests.forEach(inventoryRequest -> inventoryRequest.setQuantity(inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get().getQuantity()));
-        return new ResponseEntity<>(inventoryRequests, HttpStatus.OK);
+        List<InventoryResponse> inventoryResponses = inventoryRequests.stream()
+                .map(inventoryRequest -> InventoryResponse.builder()
+                        .productId(inventoryRequest.getProductId())
+                        .requestedQuantity(inventoryRequest.getQuantity())
+                        .existingQunatity((inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get()).getQuantity())
+                        .isInStock((inventoryRequest.getQuantity()) < ((inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get()).getQuantity()))
+                        .build())
+                .toList();
+        return new ResponseEntity<>(inventoryResponses, HttpStatus.OK);
     }
-
-
 }

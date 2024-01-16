@@ -1,7 +1,7 @@
 package com.naveen.productsapi.service;
 
-import com.naveen.productsapi.DTO.InventoryRequest;
-import com.naveen.productsapi.DTO.ProductRequest;
+import com.naveen.productsapi.dto.InventoryRequest;
+import com.naveen.productsapi.dto.ProductRequest;
 import com.naveen.productsapi.mapper.ProductMapper;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.model.Model;
@@ -10,7 +10,6 @@ import com.naveen.productsapi.repository.InventoryRepo;
 import com.naveen.productsapi.repository.ModelRepo;
 import com.naveen.productsapi.repository.ProductRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

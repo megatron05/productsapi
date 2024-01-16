@@ -1,4 +1,4 @@
-package com.naveen.productsapi.DTO;
+package com.naveen.productsapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
