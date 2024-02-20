@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ProductController {
     private final ProductService productService;
 
@@ -36,7 +37,6 @@ public class ProductController {
     @PostMapping("/toInventory")
     public ResponseEntity<?> addProductToInventory(@RequestBody InventoryRequest inventoryRequest){
         return productService.addProductToInventory(inventoryRequest);
-
     }
 
     @DeleteMapping("/{pid}")

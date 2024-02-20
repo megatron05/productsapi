@@ -2,12 +2,12 @@ package com.naveen.productsapi.service;
 
 
 import com.naveen.productsapi.dto.InventoryRequest;
+
 import com.naveen.productsapi.dto.InventoryResponse;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.repository.InventoryRepo;
 import com.naveen.productsapi.repository.ProductRepo;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,7 +88,7 @@ public class InventoryService {
                 .map(inventoryRequest -> InventoryResponse.builder()
                         .productId(inventoryRequest.getProductId())
                         .requestedQuantity(inventoryRequest.getQuantity())
-                        .existingQunatity((inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get()).getQuantity())
+                        .existingQuantity((inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get()).getQuantity())
                         .isInStock((inventoryRequest.getQuantity()) < ((inventoryRepo.findByProduct(productRepo.findById(inventoryRequest.getProductId()).get()).get()).getQuantity()))
                         .build())
                 .toList();

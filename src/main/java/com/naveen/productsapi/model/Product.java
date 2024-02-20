@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.awt.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -26,6 +27,5 @@ public class Product {
     private String size;
     private String colour;
     private BigDecimal price;
-
-
+    private String img;
 }

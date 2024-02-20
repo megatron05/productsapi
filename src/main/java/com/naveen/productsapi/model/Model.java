@@ -22,7 +22,4 @@ public class Model {
     private String design;
     private String gender;
     private String company;
-
-
-
 }
