@@ -1,10 +1,13 @@
 package com.naveen.productsapi.controller;
 
+import com.naveen.productsapi.ProductsApiApplication;
 import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.dto.ProductRequest;
 import com.naveen.productsapi.model.Product;
 import com.naveen.productsapi.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +20,10 @@ import java.util.List;
 @CrossOrigin
 public class ProductController {
     private final ProductService productService;
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductsApiApplication.class);
     @GetMapping
     public ResponseEntity<?> getAllProducts(){
+        logger.info("entered get of inventory list");
         return productService.getAllProducts();
     }
 
@@ -47,5 +51,10 @@ public class ProductController {
     @PutMapping("/{pid}")
     public ResponseEntity<?> updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long pid){
         return productService.updateProduct(productRequest, pid);
+    }
+
+    @GetMapping("/filter/{pathname}")
+    public ResponseEntity<?> getProductsWithGender(@PathVariable String pathname){
+        return productService.getProductsWithFilter(pathname);
     }
 }

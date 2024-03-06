@@ -104,5 +104,8 @@ public class ProductService {
         }
     }
 
+    public ResponseEntity<?> getProductsWithFilter(String gender) {
+        return new ResponseEntity<>(productRepo.findByModelIn(modelRepo.findByGender(gender)), HttpStatus.OK);
+    }
 }
 

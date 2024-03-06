@@ -4,6 +4,9 @@ import com.naveen.productsapi.dto.InventoryRequest;
 import com.naveen.productsapi.model.Inventory;
 import com.naveen.productsapi.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InventoryController {
     private final InventoryService inventoryService;
+    private static final Logger logger = LoggerFactory.getLogger(InventoryController.class);
 
     @GetMapping
     public ResponseEntity<List<Inventory>> getAllProductsFromInventory(){
+        logger.debug("entered get of inventory list");
         return new ResponseEntity<List<Inventory>>(inventoryService.getAllProductsFromInventory(),HttpStatus.OK);
     }
 
