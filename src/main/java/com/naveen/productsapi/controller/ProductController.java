@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductController {
     private final ProductService productService;
     private static final Logger logger = LoggerFactory.getLogger(ProductsApiApplication.class);
@@ -27,7 +27,8 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{pid}")
+    @CrossOrigin
+    @GetMapping("/product/{pid}")
     public ResponseEntity<?> getProduct(@PathVariable Long pid){
         return productService.getProduct(pid);
     }
@@ -43,17 +44,18 @@ public class ProductController {
         return productService.addProductToInventory(inventoryRequest);
     }
 
-    @DeleteMapping("/{pid}")
+    @DeleteMapping("/product/{pid}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long pid){
         return productService.deleteProduct(pid);
     }
 
-    @PutMapping("/{pid}")
+    @PutMapping("/product/{pid}")
     public ResponseEntity<?> updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long pid){
         return productService.updateProduct(productRequest, pid);
     }
 
-    @GetMapping("/filter/{pathname}")
+    @CrossOrigin
+    @GetMapping("/{pathname}")
     public ResponseEntity<?> getProductsWithGender(@PathVariable String pathname){
         return productService.getProductsWithFilter(pathname);
     }
